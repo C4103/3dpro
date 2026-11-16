@@ -6,7 +6,7 @@ on:
     # 每天北京时间 21:30 额外刷新一次
     - cron: '30 13 * * *'
     # 每小时整点刷新一次（全天 24 次）
-    - cron: '0 * * * *'
+    - cron: '7 * * * *'
   workflow_dispatch:   # Actions 页面可手动点一次立即同步
   push:
     paths:
