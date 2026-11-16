@@ -2,8 +2,11 @@ name: 同步福彩3D数据
 
 on:
   schedule:
-    # 每 6 小时同步一次
-    - cron: '0 */6 * * *'
+    # GitHub Actions 的 cron 按 UTC 计。北京时间 = UTC + 8
+    # 每天北京时间 21:30 额外刷新一次
+    - cron: '30 13 * * *'
+    # 每小时整点刷新一次（全天 24 次）
+    - cron: '0 * * * *'
   workflow_dispatch:   # Actions 页面可手动点一次立即同步
   push:
     paths:
