@@ -1,0 +1,41 @@
+name: 同步福彩3D开奖数据
+
+on:
+  schedule:
+    # UTC 13:35 = 北京时间 21:35（当天开奖收录后补一次）
+    - cron: '35 13 * * *'
+    # 其余每 6 小时补一次，防止错过
+    - cron: '0 2,8,14,20 * * *'
+  workflow_dispatch:   # 也可在 Actions 页面手动点一次
+  push:
+    paths:
+      - 'update_data.py'
+      - '.github/workflows/update.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 抓取并生成数据文件
+        run: python update_data.py
+
+      - name: 提交变更
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add 3d_asc.txt 3d_data.js
+          if git diff --cached --quiet; then
+            echo "数据无变化，跳过提交"
+          else
+            git commit -m "chore: 同步开奖数据 $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push
+          fi
