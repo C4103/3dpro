@@ -2,9 +2,7 @@ name: Sync FC3D Data
 
 on:
   schedule:
-    - cron: '30,45 13 * * *'
-    - cron: '*/15 14 * * *'
-    - cron: '0 15 * * *'
+    - cron: '35,42,47,54 * * * *'
   workflow_dispatch:
   push:
     paths:
